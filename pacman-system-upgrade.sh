@@ -21,7 +21,8 @@ while read -d $'\n' line ; do
     [[ $(d2e "$line") -gt $last_upgrade ]] && { echo "$line" ; empty='nope' ; }
 done < <(curl -s https://archlinux.org/news/ \
         | awk '/<td>[0-9\-]{10}<\/td>|title="View:/' \
-        | sed -E 's|^ +||;s|^<td>([0-9\-]{10})</td>|\1|;s|^title=.+>(.+)</a></td>$|\1|;$!N;s|\n| |'
+        | sed -E 's|^ +||;s|^<td>([0-9\-]{10})</td>|\1|;s|^title=.+>(.+)</a></td>$|\1|' \
+        | sed '$!N;s|\n| |'
 )
 
 [[ -z $empty ]] && echo -e 'No Arch Linux news since last upgrade!\n'
