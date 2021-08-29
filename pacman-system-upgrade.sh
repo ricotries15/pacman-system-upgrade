@@ -6,6 +6,11 @@
 # confirm system is arch linux
 [[ -f /etc/arch-release ]] || { echo 'system is not arch linux!' ; exit 1 ; }
 
+# confirm required dependencies are installed
+while read dependency ; do
+    missing_deps+=($(awk -F \' '/error: package.*not found/ {print $2}' <<< "$dependency"))
+done < <(pacman -Q coreutils sed gawk curl 2>&1 >/dev/null)
+
 # log since last system upgrade
 tmp_log="$(tac /var/log/pacman.log | sed -n '0,/starting full system upgrade/p' | tac)"
 
