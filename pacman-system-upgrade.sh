@@ -19,7 +19,7 @@ if [[ ${missing_deps[@]} ]] ; then
     printf 'the following dependencies are missing:\n'
     printf '    %s\n' ${missing_deps[@]}
     read -p 'would you like to install them now? [yes/no]> ' _answer
-    if [[ $_answer =~ ^y(es)?$ ]] ; then
+    if [[ ${_answer,,} =~ ^y(es)?$ ]] ; then
         pacman -S ${missing_deps[@]}
     else
         printf "install missing dependencies first!\n"
@@ -55,4 +55,4 @@ pacman -Syu
 # shutdown system at request
 sec_start
 read -p "Would you like to shut down now? [yes/no]> " _finalans
-[[ $_finalans =~ ^y(es)?$ ]] && shutdown -P now
+[[ ${_finalans,,} =~ ^y(es)?$ ]] && shutdown -P now
