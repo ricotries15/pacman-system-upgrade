@@ -51,3 +51,8 @@ done < <(curl -s https://archlinux.org/news/ \
 # execute pacman sync and upgrade
 sec_start
 pacman -Syu
+
+# shutdown system at request
+sec_start
+read -p "Would you like to shut down now? [yes/no]> " _finalans
+[[ $_finalans =~ ^y(es)?$ ]] && shutdown -P now
