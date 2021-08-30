@@ -19,11 +19,7 @@ if [[ ${missing_deps[@]} ]] ; then
     printf 'the following dependencies are missing:\n'
     printf '    %s\n' ${missing_deps[@]}
     read -p 'would you like to install them now? [yes/no]> ' _answer
-    if [[ ${_answer,,} =~ ^y(es)?$ ]] ; then
-        pacman -S ${missing_deps[@]}
-    else
-        printf "install missing dependencies first!\n"
-    fi
+    [[ ${_answer,,} =~ ^y(es)?$ ]] && pacman -S ${missing_deps[@]} || printf "install missing dependencies first!\n"
 fi
 
 # log since last system upgrade
