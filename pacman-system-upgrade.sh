@@ -53,9 +53,12 @@ pacman-system-upgrade () {
     # execute pacman sync and upgrade
     sec_start
     pacman -Syu
+    pac_exit=$?
 
     # shutdown system at request
-    sec_start
-    read -p "Would you like to shut down now? [yes/no]> " _finalans
-    [[ ${_finalans,,} =~ ^y(es)?$ ]] && shutdown -P now
+    if [[ $pac_exit -eq 0 ]] ; then
+        sec_start
+        read -p "Would you like to shut down now? [yes/no]> " _finalans
+        [[ ${_finalans,,} =~ ^y(es)?$ ]] && shutdown -P now
+    fi
 }
