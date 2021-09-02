@@ -28,11 +28,27 @@ pacman-system-upgrade () {
         fi
     fi
 
-    # log since last system upgrade
-    tmp_log="$(tac /var/log/pacman.log | sed -n '0,/starting full system upgrade/p' | tac)"
-
-    # find last upgrade time
-    last_upgrade="$(date -d "$(awk -F'[][]' 'NR==1 {print $2}' <<< "$tmp_log")" +%s)"
+    # find last successful upgrade time
+    timestamp="$(tac /var/log/pacman.log | awk '/starting full system upgrade|transaction started/' \
+        | awk -F '[][]' '
+            BEGIN { var1 = " transaction started" }
+            {
+              current = $NF;
+              if (var1 == current) {
+                  found = 1;
+                  next;
+              } else {
+                  if (found != 1) {
+                      next;
+                  } else {
+                      answer = $2;
+                      exit;
+                  }
+              }
+            }
+            END { print answer }'
+    )"
+    last_upgrade="$(date -d $timestamp +%s)"
 
     # time -> epoch function for html filter
     d2e () { date -d "$(cut -d ' ' -f 1 <<< $1) 00:00" +%s ; }
