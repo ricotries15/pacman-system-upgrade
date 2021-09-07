@@ -7,6 +7,9 @@ pacman-system-upgrade () {
     # confirm system is arch linux
     [[ -f /etc/arch-release ]] || { printf 'system is not arch linux!\n' ; exit 1 ; }
 
+    # confirm network connectivity
+    ping -c 1 archlinux.org &> /dev/null || { printf 'system does not have network connectivity!\n' ; exit 1 ; }
+
     # function to separate sections
     sec_start () { printf "\n----------\n\n" ; }
 
