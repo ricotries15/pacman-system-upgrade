@@ -21,7 +21,7 @@ pacman-system-upgrade () {
         printf '    %s\n' ${missing_deps[@]}
         read -p 'would you like to install them now? [yes/no]> ' _answer
         if [[ ${_answer,,} =~ ^y(es)?$ ]] ; then
-            pacman -S ${missing_deps[@]}
+            pacman -S --noconfirm ${missing_deps[@]}
         else
             printf "install missing dependencies first!\n"
             exit 1
