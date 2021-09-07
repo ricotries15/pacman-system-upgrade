@@ -2,13 +2,13 @@
 
 pacman-system-upgrade () {
     # confirm root is executing
-    [[ $UID -eq 0 ]] || { printf 'script requires elevated privileges!\n' ; exit 1 ; }
+    [[ $UID -eq 0 ]] || { printf 'script requires elevated privileges!\n' ; return 1 ; }
 
     # confirm system is arch linux
-    [[ -f /etc/arch-release ]] || { printf 'system is not arch linux!\n' ; exit 1 ; }
+    [[ -f /etc/arch-release ]] || { printf 'system is not arch linux!\n' ; return 1 ; }
 
     # confirm network connectivity
-    ping -c 1 archlinux.org &> /dev/null || { printf 'system does not have network connectivity!\n' ; exit 1 ; }
+    ping -c 1 archlinux.org &> /dev/null || { printf 'system does not have network connectivity!\n' ; return 1 ; }
 
     # function to separate sections
     sec_start () { printf "\n----------\n\n" ; }
@@ -27,7 +27,7 @@ pacman-system-upgrade () {
             pacman -S --noconfirm ${missing_deps[@]}
         else
             printf "install missing dependencies first!\n"
-            exit 1
+            return 1
         fi
     fi
 
